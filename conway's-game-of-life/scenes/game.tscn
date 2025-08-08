@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6wq53u6jups2"]
+
+[ext_resource type="Script" uid="uid://2j61rhkq24fu" path="res://scripts/node_2d.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://busarx4hd7jb8" path="res://scripts/camera_2d.gd" id="2_yqjtg"]
+
+[node name="Game" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+
+[node name="Node2D" type="Node2D" parent="TileMapLayer"]
+script = ExtResource("1_uwrxv")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_yqjtg")
