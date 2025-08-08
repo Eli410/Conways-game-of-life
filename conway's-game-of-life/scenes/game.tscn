@@ -1,14 +1,53 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6wq53u6jups2"]
+[gd_scene load_steps=6 format=3 uid="uid://c6wq53u6jups2"]
 
+[ext_resource type="Script" uid="uid://bhtg1k48hftqv" path="res://scripts/panel_container.gd" id="1_iywne"]
+[ext_resource type="Script" uid="uid://dqb0l7yelw0cd" path="res://scripts/fps.gd" id="1_lnu2h"]
 [ext_resource type="Script" uid="uid://2j61rhkq24fu" path="res://scripts/node_2d.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://cai4dc77okk2s" path="res://scripts/mouse_pos.gd" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://busarx4hd7jb8" path="res://scripts/camera_2d.gd" id="2_yqjtg"]
 
 [node name="Game" type="Node2D"]
+
+[node name="DebugMenu" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="DebugMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="DebugMenu/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+offset_right = 384.0
+grow_vertical = 0
+script = ExtResource("1_iywne")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugMenu/Control/PanelContainer"]
+layout_mode = 2
+
+[node name="FPS" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "144 FPS"
+fit_content = true
+script = ExtResource("1_lnu2h")
+
+[node name="MousePos" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Global mouse pos: (0, 0)"
+fit_content = true
+script = ExtResource("2_lbhrr")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_yqjtg")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 
 [node name="Node2D" type="Node2D" parent="TileMapLayer"]
 script = ExtResource("1_uwrxv")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource("2_yqjtg")

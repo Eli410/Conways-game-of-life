@@ -1,12 +1,21 @@
 extends Camera2D
 
+@export var drag_button: int = MOUSE_BUTTON_RIGHT
+var _dragging: bool = false
 
-# Called when the node enters the scene tree for the first time.
+func _unhandled_input(event):
+	# When the drag button is pressed or released
+	if event is InputEventMouseButton and event.button_index == drag_button:
+		_dragging = event.pressed
+
+	# While the mouse moves and we're dragging, pan the camera
+	elif event is InputEventMouseMotion and _dragging:
+		var delta = event.relative
+		# Move camera opposite to mouse movement
+		position -= delta
+
+func set_top_left(pos: Vector2):
+	position = pos + Vector2(get_viewport().size) / 2
+
 func _ready() -> void:
-	limit_left = -1
-	limit_top = -1
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	set_top_left(Vector2(-1, -1))

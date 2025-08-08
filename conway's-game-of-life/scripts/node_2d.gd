@@ -1,23 +1,20 @@
-@tool
 extends Node2D
 
-@export var cell_size: int = 16
-@export var grid_size: Vector2i = Vector2i(40, 25) 
-@export var grid_color: Color = Color.GRAY
-@export var line_width: float = 1.0
-
+@onready var camera_2d: Camera2D = %Camera2D
+var cell_size: int = 32
+var grid_color: Color = Color.GRAY
 var _painted : Dictionary = {}
 
 func _draw() -> void:
-	var w: int = grid_size.x * cell_size
-	var h: int = grid_size.y * cell_size
+	var w: int = get_viewport().size[0]
+	var h: int = get_viewport().size[1]
 
-	for x in range(grid_size.x + 1):
+	for x in range(w / cell_size + 1):
 		var px = x * cell_size
-		draw_line(Vector2(px, 0), Vector2(px, h), grid_color, line_width)
-	for y in range(grid_size.y + 1):
+		draw_line(Vector2(px, 0), Vector2(px, (h - h % cell_size)), grid_color, 1)
+	for y in range(h / cell_size + 1):
 		var py = y * cell_size
-		draw_line(Vector2(0, py), Vector2(w, py), grid_color, line_width)
+		draw_line(Vector2(0, py), Vector2((w - w % cell_size), py), grid_color, 1)
 
 	for pos : Vector2i in _painted.keys():
 		var c : Color = _painted[pos]
@@ -35,3 +32,10 @@ func erase_cell(cell : Vector2i) -> void:
 func clear_all() -> void:
 	_painted.clear()
 	queue_redraw()
+
+func global_to_cell(pos: Vector2i):
+	return Vector2((pos[0] / cell_size), (pos[1] / cell_size))
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		paint_cell(global_to_cell(get_global_mouse_position()), Color.WHITE)
