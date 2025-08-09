@@ -22,8 +22,8 @@ func _draw() -> void:
 
 func draw_grid():
 	var size_snapped = get_viewport().size.snapped(Vector2(cell_size, cell_size))
-	var w: int = int(size_snapped.x)
-	var h: int = int(size_snapped.y)
+	var w: int = int(size_snapped.x) + cell_size
+	var h: int = int(size_snapped.y) + cell_size
 
 	var top_left: Vector2i = Vector2i(camera_2d.call("get_top_left"))
 
@@ -84,11 +84,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventMouseButton and Input.is_action_just_released("mouse_left"):
 		mouse_left_hold = false
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP:
-		cell_size += 1
+		cell_size = min(64, cell_size + 1)
 		queue_redraw()
 		zoom_changed.emit()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-		cell_size -= 1
+		cell_size = max(2, cell_size - 1)
 		queue_redraw()
 		zoom_changed.emit()
 		

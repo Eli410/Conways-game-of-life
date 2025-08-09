@@ -25,7 +25,7 @@ func set_top_left(pos: Vector2):
 	position = pos + Vector2(get_viewport().size) / 2
 
 func set_center(pos: Vector2 = get_global_mouse_position()):
-	position = pos.snapped(Vector2(board.get('cell_size'), board.get('cell_size')))
+	position = pos
 	
 func get_top_left():
 	return global_position - Vector2(get_viewport().size) / 2

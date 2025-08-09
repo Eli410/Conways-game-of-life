@@ -4,6 +4,7 @@ var count := 0.0
 
 func _ready() -> void:
 	board.cell_changed.connect(_on_count_changed)
+	add_theme_font_size_override("normal_font_size", 12)
 	track_update()
 
 func _on_count_changed():
@@ -15,9 +16,10 @@ func track_update():
 		if board.get('simulate'):
 			await get_tree().create_timer(1.0).timeout
 			var target = round(1 / board.get('delay'))
-			text = "Target/Actual (Gen/s): " + str(target) + '/' + str(count)
+			text = "Target: " + str(target) + "\n"
+			text += "Actual: " + str(count)
 			count = 0
 		else:
 			var target = round(1 / board.get('delay'))
-			text = "Target/Actual (Gen/s): " + str(target) + "/"
+			text = "Target: " + str(target) + "\n"
 			await get_tree().process_frame
