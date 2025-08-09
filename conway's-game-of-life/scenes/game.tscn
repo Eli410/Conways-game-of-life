@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6wq53u6jups2"]
+[gd_scene load_steps=12 format=3 uid="uid://c6wq53u6jups2"]
 
 [ext_resource type="Script" uid="uid://bhtg1k48hftqv" path="res://scripts/panel_container.gd" id="1_iywne"]
 [ext_resource type="Script" uid="uid://dqb0l7yelw0cd" path="res://scripts/fps.gd" id="1_lnu2h"]
-[ext_resource type="Script" uid="uid://2j61rhkq24fu" path="res://scripts/node_2d.gd" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://2j61rhkq24fu" path="res://scripts/board.gd" id="1_uwrxv"]
 [ext_resource type="Script" uid="uid://cai4dc77okk2s" path="res://scripts/mouse_pos.gd" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://busarx4hd7jb8" path="res://scripts/camera_2d.gd" id="2_yqjtg"]
+[ext_resource type="Script" uid="uid://bc08sytabywop" path="res://scripts/cell_count.gd" id="4_p57ef"]
+[ext_resource type="Texture2D" uid="uid://dsxg41mne3lgq" path="res://icons/prev.png" id="7_0tnpc"]
+[ext_resource type="Script" uid="uid://c1l70x4gnsvw8" path="res://scripts/h_box_container.gd" id="7_kvpfn"]
+[ext_resource type="Texture2D" uid="uid://bdyhltcecs6of" path="res://icons/play.png" id="7_u5sy4"]
+[ext_resource type="Texture2D" uid="uid://dchrem8skobgo" path="res://icons/pause.png" id="9_kvpfn"]
+[ext_resource type="Texture2D" uid="uid://bn4ej744tt4b2" path="res://icons/next.png" id="9_vtaks"]
 
 [node name="Game" type="Node2D"]
 
@@ -17,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="DebugMenu/Control"]
 layout_mode = 1
@@ -43,11 +50,61 @@ text = "Global mouse pos: (0, 0)"
 fit_content = true
 script = ExtResource("2_lbhrr")
 
+[node name="CellCount" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Alive Cell: 0"
+fit_content = true
+script = ExtResource("4_p57ef")
+
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_yqjtg")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
-
-[node name="Node2D" type="Node2D" parent="TileMapLayer"]
+[node name="Board" type="Node2D" parent="."]
+unique_name_in_owner = true
 script = ExtResource("1_uwrxv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="TopMenu" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TopMenu"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 28.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TopMenu/PanelContainer"]
+layout_mode = 2
+mouse_filter = 0
+alignment = 1
+script = ExtResource("7_kvpfn")
+
+[node name="Previous" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("7_0tnpc")
+
+[node name="Play" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("7_u5sy4")
+
+[node name="Pause" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+icon = ExtResource("9_kvpfn")
+
+[node name="Next" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+icon = ExtResource("9_vtaks")
+
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Play" to="CanvasLayer/TopMenu/PanelContainer/HBoxContainer" method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Pause" to="CanvasLayer/TopMenu/PanelContainer/HBoxContainer" method="_on_pause_pressed"]

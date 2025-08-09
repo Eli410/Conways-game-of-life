@@ -3,7 +3,7 @@ extends Camera2D
 @export var drag_button: int = MOUSE_BUTTON_RIGHT
 var _dragging: bool = false
 
-func _unhandled_input(event):
+func _input(event: InputEvent) -> void:
 	# When the drag button is pressed or released
 	if event is InputEventMouseButton and event.button_index == drag_button:
 		_dragging = event.pressed

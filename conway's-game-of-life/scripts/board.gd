@@ -1,9 +1,13 @@
 extends Node2D
 
 @onready var camera_2d: Camera2D = %Camera2D
-var cell_size: int = 32
+var cell_size: int = 16
 var grid_color: Color = Color.GRAY
 var _painted : Dictionary = {}
+var mouse_left_hold := false
+var mode := "paint"
+
+signal cell_changed()
 
 func _draw() -> void:
 	var w: int = get_viewport().size[0]
@@ -23,10 +27,12 @@ func _draw() -> void:
 
 func paint_cell(cell : Vector2i, color : Color) -> void:
 	_painted[cell] = color
+	cell_changed.emit()
 	queue_redraw()
 
 func erase_cell(cell : Vector2i) -> void:
 	_painted.erase(cell)
+	cell_changed.emit()
 	queue_redraw()
 
 func clear_all() -> void:
@@ -34,8 +40,21 @@ func clear_all() -> void:
 	queue_redraw()
 
 func global_to_cell(pos: Vector2i):
-	return Vector2((pos[0] / cell_size), (pos[1] / cell_size))
+	return Vector2i((pos[0] / cell_size), (pos[1] / cell_size))
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		paint_cell(global_to_cell(get_global_mouse_position()), Color.WHITE)
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and Input.is_action_just_pressed("mouse_left"):
+		mouse_left_hold = true
+		mode = "erase" if _painted.get(global_to_cell(get_global_mouse_position())) else "paint"
+	elif event is InputEventMouseButton and Input.is_action_just_released("mouse_left"):
+		mouse_left_hold = false
+		
+	if mouse_left_hold:
+		var curr_cell = global_to_cell(get_global_mouse_position())
+		if mode == 'paint':
+			paint_cell(curr_cell, Color.WHITE)
+		else:
+			erase_cell(curr_cell)
+
+func next_gen():
+	pass
