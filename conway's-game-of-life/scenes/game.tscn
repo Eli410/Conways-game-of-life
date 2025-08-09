@@ -60,12 +60,6 @@ text = "Cell: (0, 0)"
 fit_content = true
 script = ExtResource("6_kvuet")
 
-[node name="State" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
-layout_mode = 2
-text = "Paused"
-fit_content = true
-script = ExtResource("5_dinhu")
-
 [node name="Memory" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
 layout_mode = 2
 fit_content = true
@@ -79,16 +73,16 @@ script = ExtResource("2_yqjtg")
 unique_name_in_owner = true
 script = ExtResource("1_uwrxv")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="."]
 
-[node name="TopMenu" type="Control" parent="CanvasLayer"]
+[node name="TopMenu" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 grow_horizontal = 2
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/TopMenu"]
+[node name="PanelContainer" type="PanelContainer" parent="UI/TopMenu"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -98,37 +92,37 @@ offset_right = 40.0
 offset_bottom = 49.0
 grow_horizontal = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TopMenu/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TopMenu/PanelContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TopMenu/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/TopMenu/PanelContainer/VBoxContainer"]
 layout_mode = 2
 mouse_filter = 0
 alignment = 1
 script = ExtResource("7_kvpfn")
 
-[node name="Play" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Play" type="Button" parent="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 icon = ExtResource("7_u5sy4")
 
-[node name="Pause" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Pause" type="Button" parent="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
 visible = false
 layout_mode = 2
 icon = ExtResource("9_kvpfn")
 
-[node name="Next" type="Button" parent="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
+[node name="Next" type="Button" parent="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 icon = ExtResource("9_vtaks")
 
-[node name="State" type="RichTextLabel" parent="CanvasLayer/TopMenu/PanelContainer/VBoxContainer"]
+[node name="State" type="RichTextLabel" parent="UI/TopMenu/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Paused"
 fit_content = true
 horizontal_alignment = 1
 script = ExtResource("5_dinhu")
 
-[node name="RightMenu" type="Control" parent="CanvasLayer"]
+[node name="RightMenu" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
@@ -137,7 +131,7 @@ grow_horizontal = 0
 size_flags_horizontal = 8
 size_flags_vertical = 0
 
-[node name="PanelContainer2" type="PanelContainer" parent="CanvasLayer/RightMenu"]
+[node name="PanelContainer2" type="PanelContainer" parent="UI/RightMenu"]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -146,13 +140,13 @@ offset_left = -165.0
 offset_bottom = 66.0
 grow_horizontal = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/RightMenu/PanelContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/RightMenu/PanelContainer2"]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/RightMenu/PanelContainer2/HBoxContainer"]
 layout_mode = 2
 
-[node name="SimSpeedSlider" type="HSlider" parent="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer"]
+[node name="SimSpeedSlider" type="HSlider" parent="UI/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -161,56 +155,52 @@ max_value = 1.0
 step = 0.02
 value = 0.02
 
-[node name="SimSpeedLabel" type="RichTextLabel" parent="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer"]
+[node name="SimSpeedLabel" type="RichTextLabel" parent="UI/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "Target:
 Actual:"
 fit_content = true
 script = ExtResource("7_trtic")
 
-[node name="CheckBox" type="CheckBox" parent="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer"]
+[node name="CheckBox" type="CheckBox" parent="UI/RightMenu/PanelContainer2/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Max"
 
-[node name="LeftMenu" type="Control" parent="CanvasLayer"]
+[node name="LeftMenu" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/LeftMenu"]
+[node name="PanelContainer" type="PanelContainer" parent="UI/LeftMenu"]
 layout_mode = 1
 offset_right = 161.0
 offset_bottom = 50.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/LeftMenu/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/LeftMenu/PanelContainer"]
 layout_mode = 2
 
-[node name="CellCount" type="RichTextLabel" parent="CanvasLayer/LeftMenu/PanelContainer/VBoxContainer"]
+[node name="CellCount" type="RichTextLabel" parent="UI/LeftMenu/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Alive Cell: 0"
 fit_content = true
 script = ExtResource("4_p57ef")
 
-[node name="GenCount" type="RichTextLabel" parent="CanvasLayer/LeftMenu/PanelContainer/VBoxContainer"]
+[node name="GenCount" type="RichTextLabel" parent="UI/LeftMenu/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Generation 0"
 fit_content = true
 script = ExtResource("15_ir15t")
 
-[node name="CanvasLayer2" type="CanvasLayer" parent="."]
-
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="DebugMenu/Control/PanelContainer/VBoxContainer/State" method="_on_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="Board" method="_on_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer" method="_on_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/State" method="_on_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="DebugMenu/Control/PanelContainer/VBoxContainer/State" method="_on_pause_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="Board" method="_on_pause_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer" method="_on_pause_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/State" method="_on_pause_pressed"]
-[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Next" to="Board" method="_on_next_pressed"]
-[connection signal="drag_ended" from="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer/SimSpeedSlider" to="Board" method="_on_sim_speed_slider_drag_ended"]
-[connection signal="value_changed" from="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer/SimSpeedSlider" to="Board" method="_on_sim_speed_slider_value_changed"]
-[connection signal="toggled" from="CanvasLayer/RightMenu/PanelContainer2/HBoxContainer/CheckBox" to="Board" method="_on_check_box_toggled"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="Board" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Play" to="UI/TopMenu/PanelContainer/VBoxContainer/State" method="_on_play_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="Board" method="_on_pause_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer" method="_on_pause_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Pause" to="UI/TopMenu/PanelContainer/VBoxContainer/State" method="_on_pause_pressed"]
+[connection signal="pressed" from="UI/TopMenu/PanelContainer/VBoxContainer/HBoxContainer/Next" to="Board" method="_on_next_pressed"]
+[connection signal="drag_ended" from="UI/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer/SimSpeedSlider" to="Board" method="_on_sim_speed_slider_drag_ended"]
+[connection signal="value_changed" from="UI/RightMenu/PanelContainer2/HBoxContainer/VBoxContainer/SimSpeedSlider" to="Board" method="_on_sim_speed_slider_value_changed"]
+[connection signal="toggled" from="UI/RightMenu/PanelContainer2/HBoxContainer/CheckBox" to="Board" method="_on_check_box_toggled"]
