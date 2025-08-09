@@ -10,24 +10,47 @@ var simulate := false
 var delay := 0.2
 
 signal cell_changed()
+signal zoom_changed()
 
 func _draw() -> void:
-	var w: int = get_viewport().size[0]
-	var h: int = get_viewport().size[1]
-
-	for x in range(w / cell_size + 1):
-		var px = x * cell_size
-		draw_line(Vector2(px, 0), Vector2(px, (h - h % cell_size)), grid_color, 1)
-	for y in range(h / cell_size + 1):
-		var py = y * cell_size
-		draw_line(Vector2(0, py), Vector2((w - w % cell_size), py), grid_color, 1)
+	draw_grid()
 
 	for pos : Vector2i in _painted.keys():
 		var c : Color = _painted[pos]
 		var rect = Rect2i(pos * cell_size, Vector2(cell_size, cell_size))
 		draw_rect(rect, c, true)
-	
-	cell_changed.emit()
+
+func draw_grid():
+	var size_snapped = get_viewport().size.snapped(Vector2(cell_size, cell_size))
+	var w: int = int(size_snapped.x)
+	var h: int = int(size_snapped.y)
+
+	var top_left: Vector2i = Vector2i(camera_2d.call("get_top_left"))
+
+	# Align to the grid once, then draw using aligned bases
+	var base_x: int = top_left.x - (top_left.x % cell_size)
+	var base_y: int = top_left.y - (top_left.y % cell_size)
+	var x_lines: int = w / cell_size + 1
+	var y_lines: int = h / cell_size + 1
+
+	for x in range(x_lines):
+		var px: int = base_x + x * cell_size
+		draw_line(
+			Vector2(px, base_y),
+			Vector2(px, base_y + h),
+			grid_color, 1
+		)
+
+	for y in range(y_lines):
+		var py: int = base_y + y * cell_size
+		draw_line(
+			Vector2(base_x, py),
+			Vector2(base_x + w, py),
+			grid_color, 1
+		)
+		
+	queue_redraw()
+
 
 func paint_cell(cell : Vector2i, color : Color) -> void:
 	_painted[cell] = color
@@ -37,13 +60,8 @@ func erase_cell(cell : Vector2i) -> void:
 	_painted.erase(cell)
 	queue_redraw()
 
-func clear_all() -> void:
-	_painted.clear()
-	queue_redraw()
-
 func global_to_cell(pos: Vector2i):
 	return pos / cell_size
-	#return Vector2i((pos[0] / cell_size), (pos[1] / cell_size))
 
 func get_neighbors(pos: Vector2i):
 	const neighboring_squares := [
@@ -65,6 +83,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		mode = "erase" if _painted.get(global_to_cell(get_global_mouse_position())) else "paint"
 	elif event is InputEventMouseButton and Input.is_action_just_released("mouse_left"):
 		mouse_left_hold = false
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		cell_size += 1
+		queue_redraw()
+		zoom_changed.emit()
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		cell_size -= 1
+		queue_redraw()
+		zoom_changed.emit()
+		
 		
 	if mouse_left_hold:
 		var curr_cell = global_to_cell(get_global_mouse_position())
@@ -97,6 +124,7 @@ func next_gen():
 			next_gen[c] = Color.WHITE
 	
 	_painted = next_gen
+	cell_changed.emit()
 
 func _on_next_pressed() -> void:
 	if not simulate:
@@ -119,4 +147,15 @@ func run_simulation():
 			await get_tree().process_frame
 			
 func _ready() -> void:
+	Engine.max_fps = 0 
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	camera_2d.camera_moved.connect(draw_grid)
 	run_simulation()
+	
+func _on_sim_speed_slider_value_changed(value: float) -> void:
+	var rate := 1 * pow(300 / 1, value) 
+	delay = 1.0 / rate
+
+func _on_check_box_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		delay = 0
