@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c6wq53u6jups2"]
+[gd_scene load_steps=15 format=3 uid="uid://c6wq53u6jups2"]
 
 [ext_resource type="Script" uid="uid://bhtg1k48hftqv" path="res://scripts/panel_container.gd" id="1_iywne"]
 [ext_resource type="Script" uid="uid://dqb0l7yelw0cd" path="res://scripts/fps.gd" id="1_lnu2h"]
@@ -6,8 +6,11 @@
 [ext_resource type="Script" uid="uid://cai4dc77okk2s" path="res://scripts/mouse_pos.gd" id="2_lbhrr"]
 [ext_resource type="Script" uid="uid://busarx4hd7jb8" path="res://scripts/camera_2d.gd" id="2_yqjtg"]
 [ext_resource type="Script" uid="uid://bc08sytabywop" path="res://scripts/cell_count.gd" id="4_p57ef"]
+[ext_resource type="Script" uid="uid://df0i0qyxg5163" path="res://scripts/state.gd" id="5_dinhu"]
+[ext_resource type="Script" uid="uid://bih0nlov045q" path="res://scripts/cell.gd" id="6_kvuet"]
 [ext_resource type="Texture2D" uid="uid://dsxg41mne3lgq" path="res://icons/prev.png" id="7_0tnpc"]
 [ext_resource type="Script" uid="uid://c1l70x4gnsvw8" path="res://scripts/h_box_container.gd" id="7_kvpfn"]
+[ext_resource type="Script" uid="uid://dldj6q4lyeoao" path="res://scripts/simulation_speed.gd" id="7_trtic"]
 [ext_resource type="Texture2D" uid="uid://bdyhltcecs6of" path="res://icons/play.png" id="7_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://dchrem8skobgo" path="res://icons/pause.png" id="9_kvpfn"]
 [ext_resource type="Texture2D" uid="uid://bn4ej744tt4b2" path="res://icons/next.png" id="9_vtaks"]
@@ -50,11 +53,29 @@ text = "Global mouse pos: (0, 0)"
 fit_content = true
 script = ExtResource("2_lbhrr")
 
+[node name="CellPos" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Cell: (0, 0)"
+fit_content = true
+script = ExtResource("6_kvuet")
+
 [node name="CellCount" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "Alive Cell: 0"
 fit_content = true
 script = ExtResource("4_p57ef")
+
+[node name="State" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Paused"
+fit_content = true
+script = ExtResource("5_dinhu")
+
+[node name="SimulationSpeed" type="RichTextLabel" parent="DebugMenu/Control/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Target/Actual (Gen/s):"
+fit_content = true
+script = ExtResource("7_trtic")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 unique_name_in_owner = true
@@ -106,5 +127,10 @@ icon = ExtResource("9_kvpfn")
 layout_mode = 2
 icon = ExtResource("9_vtaks")
 
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Play" to="DebugMenu/Control/PanelContainer/VBoxContainer/State" method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Play" to="Board" method="_on_play_pressed"]
 [connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Play" to="CanvasLayer/TopMenu/PanelContainer/HBoxContainer" method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Pause" to="DebugMenu/Control/PanelContainer/VBoxContainer/State" method="_on_pause_pressed"]
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Pause" to="Board" method="_on_pause_pressed"]
 [connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Pause" to="CanvasLayer/TopMenu/PanelContainer/HBoxContainer" method="_on_pause_pressed"]
+[connection signal="pressed" from="CanvasLayer/TopMenu/PanelContainer/HBoxContainer/Next" to="Board" method="_on_next_pressed"]
