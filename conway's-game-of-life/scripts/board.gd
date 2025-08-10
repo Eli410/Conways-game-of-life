@@ -1,13 +1,14 @@
 extends Node2D
-
 @onready var camera_2d: Camera2D = %Camera2D
+
 var cell_size: int = 16
 var grid_color: Color = Color.GRAY
 var _painted : Dictionary = {}
 var mouse_left_hold := false
 var mode := "paint"
 var simulate := false
-var delay := 0.2
+var num_sim_to_run := 0.0
+var target_speed := 5.0
 
 signal cell_changed()
 signal zoom_changed()
@@ -48,17 +49,12 @@ func draw_grid():
 			Vector2(base_x + w, py),
 			grid_color, 1
 		)
-		
-	queue_redraw()
-
 
 func paint_cell(cell : Vector2i, color : Color) -> void:
 	_painted[cell] = color
-	queue_redraw()
 
 func erase_cell(cell : Vector2i) -> void:
 	_painted.erase(cell)
-	queue_redraw()
 
 func global_to_cell(pos: Vector2i):
 	return pos / cell_size
@@ -100,36 +96,37 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			erase_cell(curr_cell)
 
-func next_gen():
-	var next_gen := {}
-	var alive_candidate := {}
-	for cell in _painted.keys():
-		var neighbors = get_neighbors(cell)
-		for n in neighbors:
-			if alive_candidate.get(n):
-				alive_candidate[n] += 1
-			else:
-				alive_candidate[n] = 1
+func run_sim(num_gen: float = 1):
+	
+	for i in range(max(num_gen, 1)):
+		var next_gen := {}
+		var alive_candidate := {}
+		for cell in _painted.keys():
+			var neighbors = get_neighbors(cell)
+			for n in neighbors:
+				if alive_candidate.get(n):
+					alive_candidate[n] += 1
+				else:
+					alive_candidate[n] = 1
+			
+			var num_neighbors = neighbors.values().count(1)
+			if num_neighbors < 2:
+				pass
+			elif num_neighbors == 2 or num_neighbors == 3:
+				next_gen[cell] = Color.WHITE
+			elif num_neighbors > 3:
+				pass
 		
-		var num_neighbors = neighbors.values().count(1)
-		if num_neighbors < 2:
-			pass
-		elif num_neighbors == 2 or num_neighbors == 3:
-			next_gen[cell] = Color.WHITE
-		elif num_neighbors > 3:
-			pass
-	
-	for c in alive_candidate.keys():
-		if alive_candidate[c] == 3:
-			next_gen[c] = Color.WHITE
-	
-	_painted = next_gen
-	cell_changed.emit()
+		for c in alive_candidate.keys():
+			if alive_candidate[c] == 3:
+				next_gen[c] = Color.WHITE
+		
+		cell_changed.emit()
+		_painted = next_gen
 
 func _on_next_pressed() -> void:
 	if not simulate:
-		next_gen()
-		queue_redraw()
+		run_sim()
 
 func _on_play_pressed() -> void:
 	simulate = true
@@ -137,25 +134,15 @@ func _on_play_pressed() -> void:
 func _on_pause_pressed() -> void:
 	simulate = false
 
-func run_simulation():
-	while true:
-		if simulate:
-			await get_tree().create_timer(delay).timeout
-			next_gen()
-			queue_redraw()
-		else:
-			await get_tree().process_frame
-			
-func _ready() -> void:
-	Engine.max_fps = 0 
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-	camera_2d.camera_moved.connect(draw_grid)
-	run_simulation()
-	
-func _on_sim_speed_slider_value_changed(value: float) -> void:
-	var rate := 1 * pow(300 / 1, value) 
-	delay = 1.0 / rate
+func _physics_process(delta: float) -> void:
+	if not simulate:
+		return
+	num_sim_to_run += target_speed / Engine.physics_ticks_per_second
+	run_sim(floor(num_sim_to_run))
+	num_sim_to_run -= floor(num_sim_to_run)
 
-func _on_check_box_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		delay = 0
+func _process(delta: float) -> void:
+	queue_redraw()
+
+func _on_spin_box_value_changed(value: float) -> void:
+	target_speed = value

@@ -15,11 +15,11 @@ func track_update():
 	while true:
 		if board.get('simulate'):
 			await get_tree().create_timer(1.0).timeout
-			var target = round(1 / board.get('delay'))
+			var target = board.get('target_speed')
 			text = "Target: " + str(target) + "\n"
 			text += "Actual: " + str(count)
 			count = 0
 		else:
-			var target = round(1 / board.get('delay'))
+			var target = board.get('target_speed')
 			text = "Target: " + str(target) + "\n"
 			await get_tree().process_frame
